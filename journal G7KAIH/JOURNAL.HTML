@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>School Holiday Journal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:600&family=Playfair+Display&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:#e6dccf;
+  font-family:Georgia, serif;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* ===== BOOK ===== */
+.book{
+  width:960px;
+  height:560px;
+  background:#fdf8f2;
+  border-radius:16px;
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
+  display:none;
+  overflow:hidden;
+  position:relative;
+}
+
+.book.active{display:block;}
+
+/* ================= COVER ================= */
+.cover{
+  background:linear-gradient(180deg,#0c2b47,#143a5e);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100%;
+  position:relative;
+}
+
+.cover::before,
+.cover::after{
+  content:"🦋";
+  position:absolute;
+  font-size:48px;
+  opacity:.35;
+}
+
+.cover::before{top:40px; left:60px;}
+.cover::after{bottom:40px; right:60px;}
+
+.cover-content{
+  text-align:center;
+  color:white;
+}
+
+.cover-content h1{
+  font-family:'Cinzel', serif;
+  font-size:64px;
+  letter-spacing:6px;
+  margin:0;
+}
+
+.cover-line{
+  width:160px;
+  height:2px;
+  background:white;
+  margin:24px auto;
+  opacity:.8;
+}
+
+.cover-content h2{
+  font-family:'Playfair Display', serif;
+  font-size:22px;
+  margin:0;
+}
+
+.cover-content p{
+  font-size:14px;
+  opacity:.85;
+  margin-top:6px;
+}
+
+/* ================= ISI ================= */
+.spread{
+  display:flex;
+  height:100%;
+}
+
+.page{
+  width:50%;
+  padding:36px;
+  box-sizing:border-box;
+  position:relative;
+  background:
+    linear-gradient(to bottom,
+      rgba(0,0,0,.04) 1px,
+      transparent 1px);
+  background-size:100% 28px;
+}
+
+.page::before{
+  content:"✦";
+  position:absolute;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:14px;
+  opacity:.4;
+}
+
+.left{
+  box-shadow:inset -8px 0 12px rgba(0,0,0,.15);
+}
+
+.right{
+  border-left:1px solid rgba(0,0,0,.15);
+}
+
+h3{
+  text-align:center;
+  margin-top:0;
+}
+
+/* ===== AKTIVITAS ===== */
+.activity{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:8px 0;
+}
+
+.activity-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.activity:hover{
+  background:rgba(0,0,0,.03);
+  border-radius:6px;
+  padding:2px 4px;
+}
+
+input[type="time"]{
+  border:none;
+  border-bottom:1px solid #999;
+  background:transparent;
+  font-family:inherit;
+}
+
+/* ===== REFLEKSI ===== */
+.refleksi{
+  margin-top:14px;
+}
+
+.refleksi b::after{
+  content:" ✿";
+  opacity:.6;
+}
+
+.refleksi div{
+  min-height:80px;
+  border-bottom:1px solid #999;
+}
+
+/* ===== CONTROLS ===== */
+.controls{
+  position:fixed;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+button{
+  padding:6px 18px;
+  margin:0 8px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ===== COVER ===== -->
+<div class="book active">
+  <div class="cover">
+    <div class="cover-content">
+      <h1>JOURNAL</h1>
+      <div class="cover-line"></div>
+      <h2>Keysia Wulandani</h2>
+      <p>School Holiday Activity Journal</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ISI DAY 1–14 ===== -->
+<script>
+function activities(day){
+  let list=[
+    "Bangun pagi","Beribadah","Berolahraga",
+    "Makan sehat dan bergizi","Gemar belajar","Tidur lebih awal"
+  ];
+  return list.map((t,i)=>`
+    <div class="activity">
+      <div class="activity-left">
+        <input type="checkbox" data-id="d${day}-${i}">
+        <span>${t}</span>
+      </div>
+      <input type="time" data-id="t${day}-${i}">
+    </div>
+  `).join('');
+}
+
+for(let d=1; d<=14; d+=2){
+  document.write(`
+  <div class="book">
+    <div class="spread">
+      <div class="page left">
+        <h3>Day ${d}</h3>
+        ${activities(d)}
+        <div class="refleksi"><b>Refleksi:</b><div contenteditable data-id="r${d}"></div></div>
+      </div>
+
+      <div class="page right">
+        <h3>Day ${d+1}</h3>
+        ${activities(d+1)}
+        <div class="refleksi"><b>Refleksi:</b><div contenteditable data-id="r${d+1}"></div></div>
+      </div>
+    </div>
+  </div>
+  `);
+}
+</script>
+
+</div>
+
+<div class="controls">
+  <button onclick="prev()">◀ Prev</button>
+  <button onclick="next()">Next ▶</button>
+</div>
+
+<script>
+let books=document.querySelectorAll('.book');
+let index=0;
+
+function show(){
+  books.forEach(b=>b.classList.remove('active'));
+  books[index].classList.add('active');
+}
+
+function next(){if(index<books.length-1){index++;show();}}
+function prev(){if(index>0){index--;show();}}
+
+document.querySelectorAll('[data-id]').forEach(el=>{
+  let v=localStorage.getItem(el.dataset.id);
+  if(el.type==='checkbox') el.checked=v==='true';
+  else if(el.type==='time') el.value=v||'';
+  else el.innerHTML=v||'';
+
+  el.addEventListener('input',()=>{
+    localStorage.setItem(el.dataset.id,
+      el.type==='checkbox'?el.checked:el.value||el.innerHTML);
+  });
+});
+</script>
+
+</body>
+</html>
